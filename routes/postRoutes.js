@@ -29,6 +29,8 @@ router.get('/:id', (req,res) => {
         })
 })
 
+// TODO - RETURN POST
+
 router.post('/', (req,res) =>{
     if (!req.body.title || !req.body.contents){
        //need to cancel request
@@ -52,5 +54,34 @@ router.post('/', (req,res) =>{
    
 })
 
+router.delete('/:id', (req, res) => {
+
+
+    db.findById(req.params.id)
+        .then(data => {
+            if (data.length>0) {
+                return db.remove(req.params.id).then(()=>data)
+            }
+            res.status(404).json({ message: "The post with the specified ID does not exist."})
+        })
+        .then(data => {
+            console.log(data)
+            res.json(data)})
+        .catch(err => {
+            res.status(500).json({error: "The post could not be removed"})
+        })
+    // if (!req.params.id) {
+    //     res.status(404).json({ message: "The post with the specified ID does not exist."})
+    // }
+    // db.remove(req.params.id)
+    //     .then(data =>{
+    //         res.status(204).json(data)
+    //     })
+    //     .catch(err => {
+    //         res.status(500).json({})
+    //     })
+
+    
+})
 
 module.exports = router
