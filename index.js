@@ -4,9 +4,10 @@ const app = express()
 app.use(express.json())
 
 const postRoutes = require('./routes/postRoutes')
+const commentRoutes = require('./routes/commentRoutes')
 
 app.use('/api/posts', postRoutes)
-
+app.use('/api/posts', commentRoutes)
 
 app.get('/', (req, res) =>{
     res.send("This is your server speaking")
