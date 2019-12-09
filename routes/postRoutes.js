@@ -69,19 +69,28 @@ router.delete('/:id', (req, res) => {
             res.json(data)})
         .catch(err => {
             res.status(500).json({error: "The post could not be removed"})
-        })
-    // if (!req.params.id) {
-    //     res.status(404).json({ message: "The post with the specified ID does not exist."})
-    // }
-    // db.remove(req.params.id)
-    //     .then(data =>{
-    //         res.status(204).json(data)
-    //     })
-    //     .catch(err => {
-    //         res.status(500).json({})
-    //     })
+        })    
+})
 
-    
+
+router.put('/:id', (req, res) => {
+    if(!req.body.title || !req.body.contents) {
+        return res.status(400).json({errorMessage: "Please provide title and contents for the post." })
+    }
+
+    db.update(req.params.id, {
+       title: req.body.title,
+       contents: req.body.contents
+     })
+        .then(data =>{
+            if(data =1) {
+                return res.status(200).json(req.body)
+            }
+            res.status(404).json({message: "The post with the specified ID does not exist."})
+        })
+        .catch(err =>{
+            res.status(500).json({error: "The post information could not be modified." })
+        })
 })
 
 module.exports = router
